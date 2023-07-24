@@ -6,7 +6,7 @@ metadata:
     categories: Database
     certified: 'false'
     containerImage: registry.connect.redhat.com/elastic/eck-operator@sha256:963971b40e4767fcd6740d86a9c0f28c4d708ff2e8759fc7d8b978ad239574b2
-    createdAt: 2023-05-30 06:43:38
+    createdAt: 2023-07-24 21:06:18
     description: Run Elasticsearch, Kibana, APM Server, Beats, Enterprise Search, Elastic Agent, Elastic Maps Server and Logstash on Kubernetes and OpenShift
     repository: https://github.com/elastic/cloud-on-k8s
     support: elastic.co
@@ -330,7 +330,7 @@ spec:
 
     * Kubernetes 1.24-1.27
 
-    * OpenShift 4.8-4.12
+    * OpenShift 4.9-4.13
 
     * Google Kubernetes Engine (GKE), Azure Kubernetes Service (AKS), and Amazon Elastic Kubernetes Service (EKS)
 
@@ -960,3 +960,25 @@ spec:
       targetPort: 9443
       type: ValidatingAdmissionWebhook
       webhookPath: /validate-scp-k8s-elastic-co-v1alpha1-stackconfigpolicies
+    - admissionReviewVersions:
+      - v1
+      - v1beta1
+      containerPort: 443
+      deploymentName: elastic-operator
+      failurePolicy: Ignore
+      generateName: elastic-logstash-validation-v1alpha1.k8s.elastic.co
+      matchPolicy: Exact
+      rules:
+      - apiGroups:
+        - logstash.k8s.elastic.co
+        apiVersions:
+        - v1alpha1
+        operations:
+        - CREATE
+        - UPDATE
+        resources:
+        - logstashes
+      sideEffects: None
+      targetPort: 9443
+      type: ValidatingAdmissionWebhook
+      webhookPath: /validate-logstash-k8s-elastic-co-v1alpha1-logstash
